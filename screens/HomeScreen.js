@@ -19,7 +19,7 @@ import {
   Button 
 } from 'native-base';
 
-import { WebBrowser } from 'expo';
+import * as Expo from 'expo';
 import * as firebase from 'firebase';
 
 import { MonoText } from '../components/StyledText';
@@ -32,6 +32,13 @@ export default class HomeScreen extends React.Component {
   state = {
     email: '',
     password: ''
+  }
+
+  componentDidMount() {
+
+    firebase.auth().onAuthStateChanged((user) => {
+      console.log("user in componentDidMount", user)
+    })
   }
 
   _signUpUser = (email, password) => {
@@ -60,6 +67,20 @@ export default class HomeScreen extends React.Component {
     }
     catch(error){
       console.log(error.toString())
+    }
+  }
+
+  async _loginWithFacebook() {
+    console.log("You Are in the _loginWithFacebook Function")
+
+    const {type,token} = await Expo.Facebook.logInWithReadPermissionsAsync('800638413642073', {permissions: ['public_profile']})
+
+    console.log("type", type)
+
+    if(type == 'success'){
+      const credential = firebase.auth.FacebookAuthProvider.credential(token)
+
+      firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {console.log(error)})
     }
   }
 
@@ -146,6 +167,15 @@ export default class HomeScreen extends React.Component {
                 onPress={() => 
                 this._signUpUser(this.state.email, this.state.password)}>
                   <Text style={styles.buttonText}>Sign Up</Text>
+                </Button>
+
+                <Button 
+                full 
+                rounded 
+                primary 
+                style={styles.button}
+                onPress={() => this._loginWithFacebook()}>
+                  <Text style={styles.buttonText}>Login with Facebook</Text>
                 </Button>
 
               </Form>
