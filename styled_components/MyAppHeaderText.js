@@ -6,7 +6,7 @@ export default class StyledHeader extends Component{
     render(){
         return (
         <StyledText>
-            <Text style={{fontSize: 35}} {...this.props}/>
+            <Text style={{fontSize: 35, fontWeight: 'bold'}} {...this.props}/>
         </StyledText>
         )
     }
