@@ -51,6 +51,7 @@ export default class HomeScreen extends React.Component {
       }
 
       firebase.auth().createUserWithEmailAndPassword(email, password)
+
     }
     catch(error){
       console.log(error.toString())
@@ -87,8 +88,8 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
+        {/* <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}> */}
+          {/* <View style={styles.welcomeContainer}>
             <Image
               source={
                 __DEV__
@@ -97,9 +98,9 @@ export default class HomeScreen extends React.Component {
               }
               style={styles.welcomeImage}
             />
-          </View>
+          </View> */}
 
-          <View style={styles.getStartedContainer}>
+          {/* <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
 
             <Text style={styles.getStartedText}>ITS WORKING</Text>
@@ -118,17 +119,17 @@ export default class HomeScreen extends React.Component {
               <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
+        </ScrollView> */}
 
-        <View style={styles.tabBarInfoContainer}>
+        {/* <View style={styles.tabBarInfoContainer}>
           <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
 
           <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
             <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
           </View>
-        </View>
+        </View> */}
 
-        <Container>
+        <Container style={styles.form}>
             <Content>
               <Form>
 
@@ -223,7 +224,12 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'red',
+  },
+  form: {
+    flex: 1,
+    alignContent: 'center',
+    backgroundColor: 'orange'
   },
   developmentModeText: {
     marginBottom: 20,
