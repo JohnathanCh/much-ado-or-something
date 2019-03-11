@@ -100,6 +100,7 @@ export default class HomeScreen extends React.Component {
                 <Item floatingLabel>
                   <Label>Email</Label>
                   <Input 
+                  autoCorrect={false}
                   onChangeText={(email) => {this.setState({
                     email: email
                   })}}/>
@@ -108,6 +109,7 @@ export default class HomeScreen extends React.Component {
                 <Item floatingLabel>
                   <Label>Password</Label>
                   <Input 
+                  autoCorrect={false}
                   secureTextEntry={true}
                   onChangeText={(password) => {this.setState({
                     password: password
