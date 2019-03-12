@@ -146,7 +146,7 @@ class HomeScreen extends React.Component {
                   <Text style={styles.buttonText}>Login with Facebook</Text>
                 </Button>
 
-                <Text> {this.props.user.name}</Text>
+                <Text> {this.props.user.email}</Text>
 
               </Form>
             </Content>
