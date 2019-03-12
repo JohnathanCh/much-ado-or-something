@@ -25,8 +25,9 @@ import StyledText from '../styled_components/MyAppText'
 import StyledHeader from '../styled_components/MyAppHeaderText'
 
 import { MonoText } from '../components/StyledText';
+import { connect } from 'react-redux';
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -78,8 +79,6 @@ export default class HomeScreen extends React.Component {
 
     const {type,token} = await Expo.Facebook.logInWithReadPermissionsAsync('800638413642073', {permissions: ['public_profile']})
 
-    console.log("type", type)
-
     if(type == 'success'){
       const credential = firebase.auth.FacebookAuthProvider.credential(token)
 
@@ -101,6 +100,7 @@ export default class HomeScreen extends React.Component {
                   <Label>Email</Label>
                   <Input 
                   autoCorrect={false}
+                  spellCheck={false}
                   onChangeText={(email) => {this.setState({
                     email: email
                   })}}/>
@@ -110,6 +110,7 @@ export default class HomeScreen extends React.Component {
                   <Label>Password</Label>
                   <Input 
                   autoCorrect={false}
+                  spellCheck={false}
                   secureTextEntry={true}
                   onChangeText={(password) => {this.setState({
                     password: password
@@ -145,6 +146,8 @@ export default class HomeScreen extends React.Component {
                   <Text style={styles.buttonText}>Login with Facebook</Text>
                 </Button>
 
+                <Text> {this.props.user.name}</Text>
+
               </Form>
             </Content>
         </Container>
@@ -152,6 +155,12 @@ export default class HomeScreen extends React.Component {
       </View>
     );
   }
+}
+
+const MSTP = (state) => {
+  return ({
+    user: state.user
+  })
 }
 
 const styles = StyleSheet.create({
@@ -180,3 +189,5 @@ const styles = StyleSheet.create({
     color: 'white'
   }
 });
+
+export default connect(MSTP)(HomeScreen)
