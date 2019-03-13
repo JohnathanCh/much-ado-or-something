@@ -37,15 +37,14 @@ class HomeScreen extends React.Component {
     password: ''
   }
 
-  componentDidMount() {
+  // componentDidMount() {
 
-    firebase.auth().onAuthStateChanged((user) => {
-      console.log("user in componentDidMount", user)
-    })
-  }
+  //   firebase.auth().onAuthStateChanged((user) => {
+  //     console.log("user in componentDidMount", user)
+  //   })
+  // }
 
   _signUpUser = (email, password) => {
-    // Alert.alert(email, password)
 
     try {
       if(this.state.password.length < 6) {
@@ -53,8 +52,12 @@ class HomeScreen extends React.Component {
         return;
       }
 
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-
+      firebase.auth().createUserWithEmailAndPassword(email, password).then(user => {
+        console.group();
+        console.log("_signUp user uid:");
+        console.log(user.user.uid);
+        console.groupEnd();}
+      )
     }
     catch(error){
       console.log(error.toString())
@@ -62,7 +65,6 @@ class HomeScreen extends React.Component {
   }
 
   _logInUser = (email, password) => {
-    // Alert.alert(email, password)
 
     try{
 
@@ -82,7 +84,12 @@ class HomeScreen extends React.Component {
     if(type == 'success'){
       const credential = firebase.auth.FacebookAuthProvider.credential(token)
 
-      firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {console.log(error)})
+      let user = firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {console.log(error)})
+
+        console.group()
+        console.log("_logInWithFacebook user:")
+        console.log(user)
+        console.groupEnd()
     }
   }
 
@@ -146,7 +153,7 @@ class HomeScreen extends React.Component {
                   <Text style={styles.buttonText}>Login with Facebook</Text>
                 </Button>
 
-                <Text> {this.props.user.email}</Text>
+                <Text> {this.props.user.name}</Text>
 
               </Form>
             </Content>
@@ -162,6 +169,10 @@ const MSTP = (state) => {
     user: state.user
   })
 }
+
+// const MDTP = (dispatch) => {
+
+// }
 
 const styles = StyleSheet.create({
   container: {

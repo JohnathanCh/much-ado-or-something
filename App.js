@@ -3,10 +3,9 @@ import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import * as firebase from 'firebase';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
-import userReducer from './redux/user/UserReducer';
+import Store from './redux/Store'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAsfUauwieflAU58C-mdiQoU-4Hika_kC0",
@@ -17,8 +16,6 @@ const firebaseConfig = {
   messagingSenderId: "455009651888"
 };
 firebase.initializeApp(firebaseConfig);
-
-const store = createStore(userReducer)
 
 export default class App extends React.Component {
   state = {
@@ -62,7 +59,7 @@ export default class App extends React.Component {
       );
     } else {
       return (
-        <Provider store={store}>
+        <Provider store={Store}>
           <View style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
             <AppNavigator />
