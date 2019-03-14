@@ -80,4 +80,4 @@ async function _logInWithFacebook() {
     }
   }
 
-  module.exports._logInWithFacebook = _logInWithFacebook
+module.exports._logInWithFacebook = _logInWithFacebook
