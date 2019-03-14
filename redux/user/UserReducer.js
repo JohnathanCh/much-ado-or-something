@@ -3,21 +3,21 @@ import * as actions from './UserActions'
 initialState = {
     user: {
         email: 'no email',
-        name: 'no name'
+        uid: 'no uid'
     },
     loggedIn: false
 }
 
 const userReducer = (state= initialState, action) => {
     console.log("inside userReducer")
-    
+
     switch(action.type) {
         case actions.CREATE_USER:
 
         return {
             user: {
-                id: action.payload.user.id,
-                name: action.payload.user.name,
+                uid: action.payload.user.uid,
+                email: action.payload.user.email,
             },
             loggedIn: action.payload.loggedIn
         }
@@ -26,8 +26,8 @@ const userReducer = (state= initialState, action) => {
 
         return {
             user: {
-                id: action.payload.user.id,
-                name: action.payload.user.username,
+                uid: action.payload.user.uid,
+                email: action.payload.user.email,
             },
             loggedIn: action.payload.loggedIn,
         }

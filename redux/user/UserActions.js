@@ -12,9 +12,25 @@ export const createUserAction= (user) => ({
     }
 })
 
+export const loginUserAction= (user) => ({
+    type: LOGIN_USER,
+    payload: {
+        user: {...user},
+        loggedIn: true
+    }
+})
+
+export const logoutUserAction = () => ({
+    type: LOGOUT_USER,
+    payload: {
+        user: {},
+        loggedIn: false
+    }
+})
+
 
 /*--------------- Thunk Creators---------------*/
-_signUpUser = (email, password) => {
+export const _signUpUser = (email, password) => {
 
     try {
       if(this.state.password.length < 6) {
@@ -35,7 +51,7 @@ _signUpUser = (email, password) => {
   }
 
 
-_logInUser = (email, password) => {
+export const _logInUser = (email, password) => {
 
     try{
 
@@ -63,3 +79,5 @@ async function _logInWithFacebook() {
         console.groupEnd()
     }
   }
+
+module.exports._logInWithFacebook = _logInWithFacebook
