@@ -37,12 +37,14 @@ class HomeScreen extends React.Component {
     password: ''
   }
 
-  // componentDidMount() {
+  componentDidMount() {
 
-  //   firebase.auth().onAuthStateChanged((user) => {
-  //     console.log("user in componentDidMount", user)
-  //   })
-  // }
+    firebase.auth().onAuthStateChanged((user) => {
+      console.log("user in componentDidMount", user)
+      // user.uid user.email
+      // if FB user.displayName, user.photoURL
+    })
+  }
 
   _signUpUser = (email, password) => {
 
@@ -52,10 +54,10 @@ class HomeScreen extends React.Component {
         return;
       }
 
-      firebase.auth().createUserWithEmailAndPassword(email, password).then(user => {
+      firebase.auth().createUserWithEmailAndPassword(email, password).then(userInfo => {
         console.group();
         console.log("_signUp user uid:");
-        console.log(user.user.uid);
+        console.log(userInfo.user.uid, userInfo.user.email);
         console.groupEnd();}
       )
     }
@@ -69,7 +71,7 @@ class HomeScreen extends React.Component {
     try{
 
       firebase.auth().signInWithEmailAndPassword(email, password)
-      .then( user => {console.log(user)})
+      .then( userInfo => {console.log(userInfo.user.uid, userInfo.user.email)})
     }
     catch(error){
       console.log(error.toString())
@@ -84,11 +86,11 @@ class HomeScreen extends React.Component {
     if(type == 'success'){
       const credential = firebase.auth.FacebookAuthProvider.credential(token)
 
-      let user = firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {console.log(error)})
+      let userInfo = firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {console.log(error)})
 
         console.group()
         console.log("_logInWithFacebook user:")
-        console.log(user)
+        console.log(token)
         console.groupEnd()
     }
   }
