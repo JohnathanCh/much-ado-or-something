@@ -32,6 +32,7 @@ export const logoutUserAction = () => ({
 /*--------------- Thunk Creators---------------*/
 export const _signUpUser = (email, password) => {
 
+  return function thunk(dispatch) {
     try {
       if(this.state.password.length < 6) {
         Alert.alert('Error', 'Please enter at Least 6 characters');
@@ -49,10 +50,12 @@ export const _signUpUser = (email, password) => {
       console.log(error.toString())
     }
   }
+}
 
 
 export const _logInUser = (email, password) => {
 
+  return function thunk(dispatch) {
     try{
 
         firebase.auth().signInWithEmailAndPassword(email, password)
@@ -61,6 +64,7 @@ export const _logInUser = (email, password) => {
     catch(error){
         console.log(error.toString())
     }
+  }
 }
 
 async function _logInWithFacebook() {
