@@ -12,16 +12,6 @@ const userReducer = (state= initialState, action) => {
     console.log("inside userReducer")
 
     switch(action.type) {
-        case actions.CREATE_USER:
-
-        return {
-            user: {
-                uid: action.payload.user.uid,
-                email: action.payload.user.email,
-            },
-            loggedIn: action.payload.loggedIn
-        }
-
         case actions.LOGIN_USER:        
 
         return {

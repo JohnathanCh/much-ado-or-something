@@ -86,16 +86,12 @@ class HomeScreen extends React.Component {
     if(type == 'success'){
       const credential = firebase.auth.FacebookAuthProvider.credential(token)
 
-      let userInfo = firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {console.log(error)})
-
-        console.group()
-        console.log("_logInWithFacebook user:")
-        console.log(token)
-        console.groupEnd()
+      firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {console.log(error)})
     }
   }
 
   render() {
+    console.log("PROPS", this.props)
     return (
       <View style={styles.container}>
 
