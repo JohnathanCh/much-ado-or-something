@@ -1,21 +1,15 @@
 /*--------------- Action Types ---------------*/
-export const CREATE_USER = "CREATE_USER"
 export const LOGIN_USER = "LOGIN_USER"
 export const LOGOUT_USER = "LOGOUT_USER"
 
 /*--------------- Action Creators---------------*/
-export const createUserAction= (user) => ({
-    type: CREATE_USER,
-    payload: {
-        user: {...user},
-        loggedIn: true
-    }
-})
-
-export const loginUserAction= (user) => ({
+export const loginUserAction= (email, uid) => ({
     type: LOGIN_USER,
     payload: {
-        user: {...user},
+        user: {
+          email: email,
+          uid: uid
+        },
         loggedIn: true
     }
 })
@@ -23,8 +17,11 @@ export const loginUserAction= (user) => ({
 export const logoutUserAction = () => ({
     type: LOGOUT_USER,
     payload: {
-        user: {},
-        loggedIn: false
+      user: {
+        email: 'no email',
+        uid: 'no uid'
+    },
+    loggedIn: false
     }
 })
 
@@ -39,11 +36,13 @@ export const _signUpUser = (email, password) => {
         return;
       }
 
-      firebase.auth().createUserWithEmailAndPassword(email, password).then(user => {
-        console.group();
-        console.log("_signUp user uid:");
-        console.log(user.user.uid);
-        console.groupEnd();}
+      firebase.auth().createUserWithEmailAndPassword(email, password).then(userInfo => 
+      dispatch(loginUserAction(email, userInfo.user.uid)))
+      // .then(user => {
+      //   console.group();
+      //   console.log("_signUp user uid:");
+      //   console.log(user.user.uid, user);
+      //   console.groupEnd();}
       )
     }
     catch(error){
