@@ -27,7 +27,7 @@ export const logoutUserAction = () => ({
 
 
 /*--------------- Thunk Creators---------------*/
-export const _signUpUser = (email, password) => {
+export const _signUpUserThunk = (email, password) => {
 
   return function thunk(dispatch) {
     try {
@@ -38,12 +38,8 @@ export const _signUpUser = (email, password) => {
 
       firebase.auth().createUserWithEmailAndPassword(email, password).then(userInfo => 
       dispatch(loginUserAction(email, userInfo.user.uid)))
-      // .then(user => {
-      //   console.group();
-      //   console.log("_signUp user uid:");
-      //   console.log(user.user.uid, user);
-      //   console.groupEnd();}
-      )
+
+      console.log("inside the _signUpUser thunk")
     }
     catch(error){
       console.log(error.toString())
