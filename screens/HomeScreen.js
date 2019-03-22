@@ -20,12 +20,11 @@ import {
 } from 'native-base';
 import * as Expo from 'expo';
 import * as firebase from 'firebase';
+import { connect } from 'react-redux';
 
 import StyledText from '../styled_components/MyAppText'
 import StyledHeader from '../styled_components/MyAppHeaderText'
-
-import { MonoText } from '../components/StyledText';
-import { connect } from 'react-redux';
+import signUpUserThunk from '../redux/user/UserActions'
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -138,7 +137,7 @@ class HomeScreen extends React.Component {
                 primary 
                 style={styles.button}
                 onPress={() => 
-                this._signUpUser(this.state.email, this.state.password)}>
+                this.props._signUpUser(this.state.email, this.state.password)}>
                   <Text style={styles.buttonText}>Sign Up</Text>
                 </Button>
 
@@ -151,7 +150,7 @@ class HomeScreen extends React.Component {
                   <Text style={styles.buttonText}>Login with Facebook</Text>
                 </Button>
 
-                <Text> {this.props.user.name}</Text>
+                <Text> {this.props.user.email}</Text>
 
               </Form>
             </Content>
@@ -168,9 +167,11 @@ const MSTP = (state) => {
   })
 }
 
-// const MDTP = (dispatch) => {
-
-// }
+const MDTP = (dispatch) => ({
+  _signUpUserThunk: ()=> {
+    dispatch(signUpUserThunk)
+  }
+})
 
 const styles = StyleSheet.create({
   container: {
@@ -199,4 +200,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(MSTP)(HomeScreen)
+export default connect(MSTP, MDTP)(HomeScreen)

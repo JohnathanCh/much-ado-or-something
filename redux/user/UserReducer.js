@@ -13,7 +13,7 @@ const userReducer = (state= initialState, action) => {
 
     switch(action.type) {
         case actions.LOGIN_USER:        
-
+        console.log("inside Login_User action")
         return {
             user: {
                 uid: action.payload.user.uid,
