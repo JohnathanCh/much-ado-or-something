@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 
 import StyledText from '../styled_components/MyAppText'
 import StyledHeader from '../styled_components/MyAppHeaderText'
-import signUpUserThunk from '../redux/user/UserActions'
+import { logInUserThunk } from '../redux/user/UserActions'
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -39,9 +39,7 @@ class HomeScreen extends React.Component {
   componentDidMount() {
 
     firebase.auth().onAuthStateChanged((user) => {
-      console.log("user in componentDidMount", user)
-      // user.uid user.email
-      // if FB user.displayName, user.photoURL
+      this.props._logInUserThunk(user)
     })
   }
 
@@ -53,12 +51,7 @@ class HomeScreen extends React.Component {
         return;
       }
 
-      firebase.auth().createUserWithEmailAndPassword(email, password).then(userInfo => {
-        console.group();
-        console.log("_signUp user uid:");
-        console.log(userInfo.user.uid, userInfo.user.email);
-        console.groupEnd();}
-      )
+      firebase.auth().createUserWithEmailAndPassword(email, password)
     }
     catch(error){
       console.log(error.toString())
@@ -78,7 +71,6 @@ class HomeScreen extends React.Component {
   }
 
   async _loginWithFacebook() {
-    console.log("You Are in the _loginWithFacebook Function")
 
     const {type,token} = await Expo.Facebook.logInWithReadPermissionsAsync('800638413642073', {permissions: ['public_profile']})
 
@@ -137,7 +129,7 @@ class HomeScreen extends React.Component {
                 primary 
                 style={styles.button}
                 onPress={() => 
-                this.props._signUpUser(this.state.email, this.state.password)}>
+                this._signUpUser(this.state.email, this.state.password)}>
                   <Text style={styles.buttonText}>Sign Up</Text>
                 </Button>
 
@@ -168,8 +160,8 @@ const MSTP = (state) => {
 }
 
 const MDTP = (dispatch) => ({
-  _signUpUserThunk: ()=> {
-    dispatch(signUpUserThunk)
+  _logInUserThunk: ()=> {
+    dispatch(logInUserThunk)
   }
 })
 
