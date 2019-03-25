@@ -15,10 +15,7 @@ const userReducer = (state= initialState, action) => {
         case actions.LOGIN_USER:        
         console.log("inside Login_User action")
         return {
-            user: {
-                uid: action.payload.user.uid,
-                email: action.payload.user.email,
-            },
+            user: {...action.payload.user},
             loggedIn: action.payload.loggedIn,
         }
 
