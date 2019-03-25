@@ -160,8 +160,8 @@ const MSTP = (state) => {
 }
 
 const MDTP = (dispatch) => ({
-  _logInUserThunk: ()=> {
-    dispatch(logInUserThunk)
+  _logInUserThunk: (user)=> {
+    dispatch(logInUserThunk(user))
   }
 })
 
