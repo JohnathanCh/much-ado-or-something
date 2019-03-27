@@ -9,11 +9,9 @@ initialState = {
 }
 
 const userReducer = (state= initialState, action) => {
-    console.log("inside userReducer")
 
     switch(action.type) {
         case actions.LOGIN_USER:        
-        console.log("inside Login_User action")
         return {
             user: {...action.payload.user},
             loggedIn: action.payload.loggedIn,
