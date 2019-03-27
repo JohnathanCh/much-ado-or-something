@@ -33,6 +33,10 @@ class HomeScreen extends React.Component {
     }
   }
 
+  _addNote = () => {
+    Alert.alert("test")
+  }
+
   render() {
 
     let notes = this.state.noteArray.map((val, key) => {
