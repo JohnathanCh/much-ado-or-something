@@ -20,6 +20,7 @@ import {
   Button 
 } from 'native-base';
 import { connect } from 'react-redux';
+import * as firebase from 'firebase';
 
 import Note from './NoteScreen';
 
@@ -29,19 +30,42 @@ class HomeScreen extends React.Component {
     super(props);
     this.state = {
       noteArray: [],
-      noteText: 'empty',
+      noteText: '',
     }
   }
 
   _addNote = () => {
-    Alert.alert("test")
+
+    if(this.state.noteText){
+      let date = new Date()
+
+      this.state.noteArray.push({ 
+        note: this.state.noteText,
+      })
+
+      this.setState({
+        noteArray: this.state.noteArray,
+        noteText: '',
+      })
+
+      firebase.database().ref('Notes/').set({
+        noteText: this.state.noteText
+      });
+    }
+  }
+
+  _deleteNote = (key) => {
+    this.state.noteArray.splice(key, 1);
+    this.setState({
+      noteArray: this.state.noteArray
+    })
   }
 
   render() {
 
     let notes = this.state.noteArray.map((val, key) => {
       return (<Note key={key} keyval={key} val={val} 
-              deleteMethod={ () => this.deleteNote(key)}/>
+              deleteMethod={ () => this._deleteNote(key)}/>
       )
 
     } )
@@ -57,7 +81,7 @@ class HomeScreen extends React.Component {
             </View>
 
             <ScrollView>
-
+            {notes}
             </ScrollView>
               
             </Content>
@@ -80,7 +104,7 @@ class HomeScreen extends React.Component {
               </Content>
             </View>
 
-            <TouchableOpacity onPress={ this.addNote.bind(this) } style={styles.addButton}>
+            <TouchableOpacity onPress={() => this._addNote() } style={styles.addButton}>
               <Text style={styles.addButtonText}>+</Text>
             </TouchableOpacity>
         </Container>

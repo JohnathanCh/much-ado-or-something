@@ -14,15 +14,10 @@ class Note extends Component {
         return(
             <View key={this.props.keyval} style={styles.note}>
                 <Text style={styles.noteText}>
-                    This is where the notes will be
-                    {this.props.val.date}
-                </Text>
-                <Text style={styles.noteText}>
-                    
                     {this.props.val.note}
                 </Text>
 
-                <TouchableOpacity onPress={() => this.props.deleteMethod} style={styles.noteDelete}>
+                <TouchableOpacity onPress={() => this.props.deleteMethod(this.props.key)} style={styles.noteDelete}>
                     <Text style={styles.noteDeleteText}>D</Text>
                 </TouchableOpacity>
             </View>
