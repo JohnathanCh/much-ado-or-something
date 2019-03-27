@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  TextInput,
   Alert
 } from 'react-native';
 import { 
@@ -18,134 +19,66 @@ import {
   Container, 
   Button 
 } from 'native-base';
-import * as Expo from 'expo';
-import * as firebase from 'firebase';
 import { connect } from 'react-redux';
 
-import StyledText from '../styled_components/MyAppText'
-import StyledHeader from '../styled_components/MyAppHeaderText'
-import { logInUserThunk } from '../redux/user/UserActions'
+import Note from './NoteScreen';
 
 class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
 
-  state = {
-    email: '',
-    password: ''
-  }
-
-  componentDidMount() {
-
-    firebase.auth().onAuthStateChanged((user) => {
-      this.props._logInUserThunk(user)
-    })
-  }
-
-  _signUpUser = (email, password) => {
-
-    try {
-      if(this.state.password.length < 6) {
-        Alert.alert('Error', 'Please enter at Least 6 characters');
-        return;
-      }
-
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-    }
-    catch(error){
-      console.log(error.toString())
-    }
-  }
-
-  _logInUser = (email, password) => {
-
-    try{
-
-      firebase.auth().signInWithEmailAndPassword(email, password)
-      .then( userInfo => {console.log(userInfo.user.uid, userInfo.user.email)})
-    }
-    catch(error){
-      console.log(error.toString())
-    }
-  }
-
-  async _loginWithFacebook() {
-
-    const {type,token} = await Expo.Facebook.logInWithReadPermissionsAsync('800638413642073', {permissions: ['public_profile']})
-
-    if(type == 'success'){
-      const credential = firebase.auth.FacebookAuthProvider.credential(token)
-
-      firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {console.log(error)})
+  constructor(props){
+    super(props);
+    this.state = {
+      noteArray: [],
+      noteText: 'empty',
     }
   }
 
   render() {
-    console.log("PROPS", this.props)
+
+    let notes = this.state.noteArray.map((val, key) => {
+      return (<Note key={key} keyval={key} val={val} 
+              deleteMethod={ () => this.deleteNote(key)}/>
+      )
+
+    } )
     return (
       <View style={styles.container}>
-
-        <Container style={styles.form}>
+        <Container>
             <Content>
-            <StyledHeader>Much Ado...</StyledHeader>
-            <StyledText>Or Something</StyledText>
-              <Form>
 
-                <Item floatingLabel>
-                  <Label>Email</Label>
-                  <Input 
-                  autoCorrect={false}
-                  spellCheck={false}
-                  onChangeText={(email) => {this.setState({
-                    email: email
-                  })}}/>
-                </Item>
+            <View style={styles.header}>
+              <Text style={styles.headerText}>
+                Much Ado..
+              </Text>
+            </View>
 
-                <Item floatingLabel>
-                  <Label>Password</Label>
-                  <Input 
-                  autoCorrect={false}
-                  spellCheck={false}
-                  secureTextEntry={true}
-                  onChangeText={(password) => {this.setState({
-                    password: password
-                  })}}/>
-                </Item>
+            <ScrollView>
 
-                <Button 
-                full 
-                rounded 
-                style={styles.button}
-                onPress={() => 
-                this._logInUser(this.state.email, this.state.password)}
-                >
-                  <Text style={styles.buttonText}>Login</Text>
-                </Button>
-
-                <Button 
-                full 
-                rounded 
-                primary 
-                style={styles.button}
-                onPress={() => 
-                this._signUpUser(this.state.email, this.state.password)}>
-                  <Text style={styles.buttonText}>Sign Up</Text>
-                </Button>
-
-                <Button 
-                full 
-                rounded 
-                primary 
-                style={styles.button}
-                onPress={() => this._loginWithFacebook()}>
-                  <Text style={styles.buttonText}>Login with Facebook</Text>
-                </Button>
-
-                <Text> {this.props.user.email}</Text>
-
-              </Form>
+            </ScrollView>
+              
             </Content>
+
+            <View style={styles.footer}>
+              <Content>
+                <Item >
+                  <Input
+                  autoCorrect={true}
+                  spellCheck={true}
+                  placeholder='New To Do Item'
+                  underlineColorAndroid='transparent'
+                  style={styles.textInput}
+                  onChangeText={(noteText) => 
+                  this.setState({noteText})}
+                  value={this.state.noteText}
+                  >
+                  </Input>
+                </Item>
+              </Content>
+            </View>
+
+            <TouchableOpacity onPress={ this.addNote.bind(this) } style={styles.addButton}>
+              <Text style={styles.addButtonText}>+</Text>
+            </TouchableOpacity>
         </Container>
 
       </View>
@@ -159,37 +92,59 @@ const MSTP = (state) => {
   })
 }
 
-const MDTP = (dispatch) => ({
-  _logInUserThunk: (user)=> {
-    dispatch(logInUserThunk(user))
-  }
-})
-
 const styles = StyleSheet.create({
   container: {
+    flex: 1
+  },
+  header: {
+    backgroundColor: "#E91E63",
+    alignItems: "center",
+    justifyContent: "center",
+    borderBottomWidth: 10,
+    borderBottomColor: "#ddd"
+  },
+  headerText: {
+    color: "white",
+    fontSize: 18,
+    padding: 26
+  },
+  scrollContainer: {
     flex: 1,
-    // backgroundColor: 'red',
-    alignItems: 'center',
-    justifyContent: 'center'
+    marginBottom: 100
   },
-  title: {
-    backgroundColor: 'black',
-    color: 'white',
-    paddingTop: '50%',
+  footer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10
   },
-  form: {
-    backgroundColor: 'orange',
-    alignContent: 'center',
-    justifyContent: 'center',
-    paddingTop: '50%',
-    width: '75%'
+  textInput: {
+    alignSelf: "stretch",
+    color: "#fff",
+    padding: 20,
+    backgroundColor: "#252525",
+    borderTopWidth: 2,
+    borderTopColor: "#ededed",
+    marginBottom: 10
   },
-  button: {
-    marginTop: 15,
+  addButton: {
+    position: "absolute",
+    zIndex: 11,
+    right: 20,
+    bottom: 90,
+    backgroundColor: "#e91e63",
+    width: 90,
+    height: 90,
+    borderRadius: 59,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 8
   },
-  buttonText: {
-    color: 'white'
+  addButtonText: {
+    color: "#fff",
+    fontSize: 24
   }
-});
+});﻿
 
-export default connect(MSTP, MDTP)(HomeScreen)
+export default connect(MSTP)(HomeScreen)

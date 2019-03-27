@@ -11,7 +11,7 @@ const HomeStack = createStackNavigator({
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'New List',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -29,7 +29,7 @@ const NoteStack = createStackNavigator({
 });
 
 NoteStack.navigationOptions = {
-  tabBarLabel: 'Notes',
+  tabBarLabel: 'Old Lists',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}

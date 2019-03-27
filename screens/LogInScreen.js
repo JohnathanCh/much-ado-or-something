@@ -27,9 +27,6 @@ import StyledHeader from '../styled_components/MyAppHeaderText'
 import { logInUserThunk } from '../redux/user/UserActions'
 
 class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
 
   state = {
     email: '',
@@ -37,10 +34,15 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
-
     firebase.auth().onAuthStateChanged((user) => {
       this.props._logInUserThunk(user)
     })
+  }
+
+  componentDidUpdate() {
+    if(this.props.loggedIn === true) {
+      this.props.navigation.navigate('Home')
+    }
   }
 
   _signUpUser = (email, password) => {
@@ -61,9 +63,7 @@ class HomeScreen extends React.Component {
   _logInUser = (email, password) => {
 
     try{
-
       firebase.auth().signInWithEmailAndPassword(email, password)
-      .then( userInfo => {console.log(userInfo.user.uid, userInfo.user.email)})
     }
     catch(error){
       console.log(error.toString())
@@ -77,14 +77,17 @@ class HomeScreen extends React.Component {
     if(type == 'success'){
       const credential = firebase.auth.FacebookAuthProvider.credential(token)
 
-      firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {console.log(error)})
+      firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {console.log("\n ERROR \n\n", error)})
     }
   }
 
   render() {
-    console.log("PROPS", this.props)
+    console.log("\n PROPS \n\n", this.props)
     return (
       <View style={styles.container}>
+        <Text>
+          LOGIN
+        </Text>
 
         <Container style={styles.form}>
             <Content>
@@ -142,6 +145,15 @@ class HomeScreen extends React.Component {
                   <Text style={styles.buttonText}>Login with Facebook</Text>
                 </Button>
 
+                <Button 
+                full 
+                rounded 
+                primary 
+                style={styles.button}
+                onPress={() => this.props.navigation.navigate('OldLists')}>
+                  <Text style={styles.buttonText}>NAVIGATE TEST</Text>
+                </Button>
+
                 <Text> {this.props.user.email}</Text>
 
               </Form>
@@ -155,7 +167,8 @@ class HomeScreen extends React.Component {
 
 const MSTP = (state) => {
   return ({
-    user: state.user
+    user: state.user,
+    loggedIn: state.loggedIn
   })
 }
 
@@ -181,8 +194,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'orange',
     alignContent: 'center',
     justifyContent: 'center',
-    paddingTop: '50%',
-    width: '75%'
+    paddingTop: '10%',
+    width: '75%',
+    height: '100%'
   },
   button: {
     marginTop: 15,
