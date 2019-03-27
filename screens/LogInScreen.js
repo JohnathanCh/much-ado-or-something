@@ -154,8 +154,6 @@ class HomeScreen extends React.Component {
                   <Text style={styles.buttonText}>NAVIGATE TEST</Text>
                 </Button>
 
-                <Text> {this.props.user.email}</Text>
-
               </Form>
             </Content>
         </Container>

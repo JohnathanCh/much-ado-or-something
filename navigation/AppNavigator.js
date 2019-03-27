@@ -5,6 +5,7 @@ import MainTabNavigator from './MainTabNavigator';
 import LogInScreen from '../screens/LogInScreen';
 import NoteScreen from '../screens/NoteScreen';
 import HomeScreen from '../screens/HomeScreen';
+import NewNoteScreen from '../screens/NewNoteScreen'
 
 // export default createAppContainer(createSwitchNavigator(
   // {
@@ -21,7 +22,7 @@ const AppNavigator = createStackNavigator(
   { 
     Main: MainTabNavigator,
     LogIn: LogInScreen,
-    Home: HomeScreen,
+    Home: NewNoteScreen,
     OldLists: NoteScreen
   },
   {

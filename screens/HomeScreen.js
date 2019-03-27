@@ -20,6 +20,7 @@ import {
   Button 
 } from 'native-base';
 import { connect } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons'
 
 import Note from './NoteScreen';
 
@@ -29,25 +30,42 @@ class HomeScreen extends React.Component {
     super(props);
     this.state = {
       noteArray: [],
-      noteText: 'empty',
+      noteText: '',
+      visibilityFilter: 'SHOW_ALL_NOTES',
     }
   }
 
   _addNote = () => {
-    Alert.alert("test")
+    if(this.state.noteText){
+      let date = new Date()
+      this.state.noteArray.push({
+        date: date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDay(),
+        "note": this.state.noteText
+      })
+
+      this.setState({ 
+        noteArray: this.state.noteArray,
+        noteText: ''
+      })
+    }
+  }
+
+  _deleteNote = key => {
+    this.state.noteArray.splice(key, 1);
+    this.setState({ noteArray: this.state.noteArray.splice(key, 1) });
   }
 
   render() {
 
     let notes = this.state.noteArray.map((val, key) => {
       return (<Note key={key} keyval={key} val={val} 
-              deleteMethod={ () => this.deleteNote(key)}/>
+              deleteMethod={ () => this._deleteNote(key)}/>
       )
 
     } )
     return (
       <View style={styles.container}>
-        <Container>
+        {/* <Container>
             <Content>
 
             <View style={styles.header}>
@@ -57,7 +75,7 @@ class HomeScreen extends React.Component {
             </View>
 
             <ScrollView>
-
+              {notes}
             </ScrollView>
               
             </Content>
@@ -80,10 +98,10 @@ class HomeScreen extends React.Component {
               </Content>
             </View>
 
-            <TouchableOpacity onPress={ this.addNote.bind(this) } style={styles.addButton}>
-              <Text style={styles.addButtonText}>+</Text>
+            <TouchableOpacity onPress={ this._addNote.bind(this) } style={styles.addButton}>
+              <Ionicons name="md-add" size={30} style={{padding: 10, alignSelf: 'center'}}/>
             </TouchableOpacity>
-        </Container>
+        </Container> */}
 
       </View>
     );
