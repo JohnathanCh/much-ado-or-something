@@ -26,21 +26,57 @@ import Note from './NoteScreen';
 
 class HomeScreen extends React.Component {
 
-  constructor(props){
-    super(props);
-    this.state = {
-      noteArray: [],
-      noteText: '',
-    }
+  // constructor(props){
+  //   super(props);
+  //   this.state = {
+  //     noteArray: [],
+  //     noteText: '',
+  //   }
+  // }
+
+  state = {
+    noteArray: [],
+    noteText: '',
+  }
+
+  componentDidMount(){
+    // create listener on the node user/ this.user.uid /notes
+    this.getNotes();
+  }
+
+snapshotToArray = (snapshot) => {
+  var returnArr = [];
+
+  snapshot.forEach(function(childSnapshot) {
+      var note = childSnapshot.val();
+      note.noteId = childSnapshot.key;
+
+      returnArr.push(note);
+  });
+
+  return returnArr;
+};
+
+  getNotes = () =>{
+      firebase.database().ref(`users/${this.props.user.uid}/notes`).once('value').then(snapshot => this.snapshotToArray(snapshot)).then(notes => {
+        this.setState({
+          noteArray: [...notes],
+          noteText: this.state.noteText
+        })
+      })
+
+      // firebase.database().ref(`users/${this.props.user.uid}/notes`).on('value', function (snapshot) {
+      //   this.snapshotToArray(snapshot).then(notes => {
+      //     this.setState({
+      //     noteArray: [...notes] })})
+      // })
   }
 
   _addNote = () => {
 
     if(this.state.noteText){
-      let date = new Date()
-
       this.state.noteArray.push({ 
-        note: this.state.noteText,
+        noteText: this.state.noteText,
       })
 
       this.setState({
@@ -58,10 +94,10 @@ class HomeScreen extends React.Component {
     return new Promise((resolve, reject) => {
       const { noteArray, noteText } = this.state
 
-      var d = new Date();
+      var date = new Date();
       const newElement = {
-        'date':d.getFullYear()+ "/"+(d.getMonth()+1) + "/"+ d.getDate(),
-        'note': noteText
+        'date':date.getFullYear()+ "/"+(date.getMonth()+1) + "/"+ date.getDate(),
+        'noteText': noteText
       }
 
       this.setState({
@@ -76,25 +112,35 @@ class HomeScreen extends React.Component {
     const refInDatabase = firebase.database().ref('users/' + this.props.user.uid + '/notes/').push();
     this.createNote()
       .then((elementReceived) => refInDatabase.update(elementReceived))
-      .then(() => console.log('inserted'))
+      .then(() => console.log('note inserted into database'))
       .catch((error) => console.log(error));
   }
 
+  deleteNoteFromFirebase = (noteId) => {
+    firebase.database().ref('users/' + this.props.user.uid + '/notes/' + noteId).remove();
+  }
+
   _deleteNote = (key) => {
-    this.state.noteArray.splice(key, 1);
+    let removedNote = this.state.noteArray.splice(key, 1);
+    // removedNote datastructure
+    // [ Object {
+    //     "date": "2019/3/28",
+    //     "noteId": "-Lb4ltSfGi5UqJcAG9q5",
+    //     "noteText": "Hi",
+    //   },]
+
     this.setState({
       noteArray: this.state.noteArray
     })
+    this.deleteNoteFromFirebase(removedNote[0].noteId)
   }
 
   render() {
 
     let notes = this.state.noteArray.map((val, key) => {
       return (<Note key={key} keyval={key} val={val} 
-              deleteMethod={ () => this._deleteNote(key)}/>
-      )
-
-    } )
+              deleteMethod={ () => this._deleteNote(key)}/>)})
+              
     return (
       <View style={styles.container}>
         <Container>
