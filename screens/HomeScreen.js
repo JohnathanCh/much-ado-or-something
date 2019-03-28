@@ -48,10 +48,36 @@ class HomeScreen extends React.Component {
         noteText: '',
       })
 
-      firebase.database().ref('Notes/').set({
+      firebase.database().push().set({
         noteText: this.state.noteText
-      });
+      })
     }
+  }
+
+  createNote = () => {
+    return new Promise((resolve, reject) => {
+      const { noteArray, noteText } = this.state
+
+      var d = new Date();
+      const newElement = {
+        'date':d.getFullYear()+ "/"+(d.getMonth()+1) + "/"+ d.getDate(),
+        'note': noteText
+      }
+
+      this.setState({
+         noteArray: [...noteArray, newElement ],
+         noteText:''
+      }, () => resolve(newElement))
+
+    })
+  }
+
+  _addNoteToFirebase = () => {
+    const refInDatabase = firebase.database().ref('users/' + this.props.user.uid + '/notes/').push();
+    this.createNote()
+      .then((elementReceived) => refInDatabase.update(elementReceived))
+      .then(() => console.log('inserted'))
+      .catch((error) => console.log(error));
   }
 
   _deleteNote = (key) => {
@@ -104,7 +130,7 @@ class HomeScreen extends React.Component {
               </Content>
             </View>
 
-            <TouchableOpacity onPress={() => this._addNote() } style={styles.addButton}>
+            <TouchableOpacity onPress={() => this._addNoteToFirebase() } style={styles.addButton}>
               <Text style={styles.addButtonText}>+</Text>
             </TouchableOpacity>
         </Container>
