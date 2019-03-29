@@ -5,6 +5,7 @@ import MainTabNavigator from './MainTabNavigator';
 import LogInScreen from '../screens/LogInScreen';
 import NoteScreen from '../screens/NoteScreen';
 import HomeScreen from '../screens/HomeScreen';
+import NewNoteScreen from '../screens/NewNoteScreen'
 
 const AppNavigator = createStackNavigator(
   { 
