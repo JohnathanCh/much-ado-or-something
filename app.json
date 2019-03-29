@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "Much Ado, or something",
+    "name": "Much Ado",
     "slug": "To_Do_App",
     "privacy": "public",
+    "description": "Make some To-Dos!",
     "sdkVersion": "32.0.0",
     "platforms": [
       "ios",
