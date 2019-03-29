@@ -1,18 +1,12 @@
 import React from 'react';
 import {
-  Image,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  TextInput,
-  Alert
 } from 'react-native';
 import { 
-  Form, 
-  Label, 
   Input, 
   Item, 
   Content, 
@@ -26,14 +20,6 @@ import Note from './NoteScreen';
 
 class HomeScreen extends React.Component {
 
-  // constructor(props){
-  //   super(props);
-  //   this.state = {
-  //     noteArray: [],
-  //     noteText: '',
-  //   }
-  // }
-
   state = {
     noteArray: [],
     noteText: '',
@@ -42,7 +28,6 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount(){
-    // create listener on the node user/ this.user.uid /notes
     this.getNotes();
   }
 

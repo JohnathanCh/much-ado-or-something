@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import {
     View,
-    ScrollView,
     Text,
-    TextInput,
     TouchableOpacity,
     StyleSheet
 } from 'react-native';
@@ -26,10 +24,6 @@ class Note extends Component {
     }
 
     render() {
-        console.group("\n\n\n Note props \n\n\n")
-        console.log(this.props.val.noteId)
-        console.groupEnd()
-
         return(
             <View key={this.props.keyval} style={styles.note}>
                 <CheckBox checked={this.state.checked} onPress={() => this._checkBox()} style={styles.checkBox}/>
@@ -75,7 +69,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         borderBottomColor: '#94CDAB',
         backgroundColor: 'lightgrey',
-        // flexDirection: 'row',
     },
     checkBox: {
         alignSelf: 'flex-start',
@@ -87,7 +80,6 @@ const styles = StyleSheet.create({
         flex: 3,
     },
     buttons: {
-        // backgroundColor: 'red',
         flex: 1,
         alignItems: 'flex-end',
         flexDirection: 'row',

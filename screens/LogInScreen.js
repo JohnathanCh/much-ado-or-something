@@ -1,11 +1,7 @@
 import React from 'react';
 import {
-  Image,
-  Platform,
-  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
   Alert
 } from 'react-native';
@@ -22,7 +18,6 @@ import * as Expo from 'expo';
 import * as firebase from 'firebase';
 import { connect } from 'react-redux';
 
-import StyledText from '../styled_components/MyAppText'
 import StyledHeader from '../styled_components/MyAppHeaderText'
 import { logInUserThunk } from '../redux/user/UserActions'
 
@@ -82,7 +77,6 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    // console.log("\n PROPS \n\n", this.props)
     return (
       <View style={styles.container}>
 
@@ -173,7 +167,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   title: {
-    // backgroundColor: 'black',
     color: 'white',
     paddingTop: '50%',
   },
@@ -188,12 +181,10 @@ const styles = StyleSheet.create({
   buttons: {
     margin: 'auto',
     alignItems: 'flex-end'
-    // alignContent: 'center',
   },
   button: {
     marginTop: 25,
     backgroundColor: '#22A255',
-    // alignContent: 'center',
   },
   buttonText: {
     color: 'white'

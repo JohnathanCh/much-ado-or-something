@@ -10,6 +10,5 @@ export default class StyledText extends Component{
 const styles = StyleSheet.create({
     text: {
         color: 'white',
-        // backgroundColor: 'black'
     }
 })

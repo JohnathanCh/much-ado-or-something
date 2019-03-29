@@ -6,17 +6,6 @@ import LogInScreen from '../screens/LogInScreen';
 import NoteScreen from '../screens/NoteScreen';
 import HomeScreen from '../screens/HomeScreen';
 
-// export default createAppContainer(createSwitchNavigator(
-  // {
-  //   Main: MainTabNavigator,
-  //   LogIn: LogInScreen,
-  //   Notes: NoteScreen
-  // },
-  // {
-  //   initialRouteName: 'LogIn'
-  // }
-// ));
-
 const AppNavigator = createStackNavigator(
   { 
     Main: MainTabNavigator,
