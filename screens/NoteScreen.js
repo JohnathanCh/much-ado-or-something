@@ -26,9 +26,13 @@ class Note extends Component {
     }
 
     render() {
+        console.group("\n\n\n Note props \n\n\n")
+        console.log(this.props.val.noteId)
+        console.groupEnd()
+
         return(
             <View key={this.props.keyval} style={styles.note}>
-                <CheckBox checked={this.state.checked} onPress={() => this._checkBox()} />
+                <CheckBox checked={this.state.checked} onPress={() => this._checkBox()} style={styles.checkBox}/>
                 <Body>
 
                 {this.state.checked ?                 
@@ -42,10 +46,16 @@ class Note extends Component {
                 }
 
                 </Body>
+                
+                <View style={styles.buttons}>
+                    <TouchableOpacity onPress={() => this.props.updateMethod(this.props.val.noteId, this.props.val.noteText)} style={styles.noteUpdate}>
+                        <Text style={styles.noteUpdateText}>Update</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.props.deleteMethod(this.props.key)} style={styles.noteDelete}>
-                    <Text style={styles.noteDeleteText}>Delete</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.deleteMethod(this.props.key)} style={styles.noteDelete}>
+                        <Text style={styles.noteDeleteText}>Delete</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     }
@@ -65,14 +75,44 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         borderBottomColor: '#94CDAB',
         backgroundColor: 'lightgrey',
+        // flexDirection: 'row',
+    },
+    checkBox: {
+        alignSelf: 'flex-start',
     },
     noteText: {
         paddingLeft: 20,
         borderLeftWidth: 10,
         color: 'purple',
+        flex: 3,
+    },
+    buttons: {
+        // backgroundColor: 'red',
+        flex: 1,
+        alignItems: 'flex-end',
+        flexDirection: 'row',
+        left: 100,
     },
     noteDelete: {
-        position: 'absolute',
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#2980b9',
+        padding: 10,
+        top: 10,
+        bottom: 10,
+        right: 10,
+        borderRadius: 40,
+        maxWidth: 100,
+        maxHeight: 50,
+        flex: 1,
+
+    },
+    noteDeleteText: {
+        color: 'white',
+    },
+    noteUpdate: {
+        position: 'relative',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#2980b9',
@@ -85,8 +125,8 @@ const styles = StyleSheet.create({
         maxHeight: 50,
         flex: 1,
     },
-    noteDeleteText: {
+    noteUpdateText: {
         color: 'white',
     }
-
+    
 })

@@ -17,7 +17,7 @@ import {
   Item, 
   Content, 
   Container, 
-  Button 
+  Footer
 } from 'native-base';
 import { connect } from 'react-redux';
 import * as firebase from 'firebase';
@@ -37,6 +37,8 @@ class HomeScreen extends React.Component {
   state = {
     noteArray: [],
     noteText: '',
+    updatingNote: false,
+    updateNoteId: '',
   }
 
   componentDidMount(){
@@ -64,56 +66,34 @@ snapshotToArray = (snapshot) => {
           noteText: this.state.noteText
         })
       })
-
-      // firebase.database().ref(`users/${this.props.user.uid}/notes`).on('value', function (snapshot) {
-      //   this.snapshotToArray(snapshot).then(notes => {
-      //     this.setState({
-      //     noteArray: [...notes] })})
-      // })
-  }
-
-  _addNote = () => {
-
-    if(this.state.noteText){
-      this.state.noteArray.push({ 
-        noteText: this.state.noteText,
-      })
-
-      this.setState({
-        noteArray: this.state.noteArray,
-        noteText: '',
-      })
-
-      firebase.database().push().set({
-        noteText: this.state.noteText
-      })
-    }
   }
 
   createNote = () => {
-    return new Promise((resolve, reject) => {
-      const { noteArray, noteText } = this.state
-
-      var date = new Date();
-      const newElement = {
-        'date':date.getFullYear()+ "/"+(date.getMonth()+1) + "/"+ date.getDate(),
-        'noteText': noteText
-      }
-
-      this.setState({
-         noteArray: [...noteArray, newElement ],
-         noteText:''
-      }, () => resolve(newElement))
-
-    })
+      return new Promise((resolve, reject) => {
+        const { noteArray, noteText } = this.state
+  
+        var date = new Date();
+        const newElement = {
+          'date':date.getFullYear()+ "/"+(date.getMonth()+1) + "/"+ date.getDate(),
+          'noteText': noteText
+        }
+  
+        this.setState({
+           noteArray: [...noteArray, newElement ],
+           noteText:''
+        }, () => resolve(newElement))
+  
+      })
   }
 
   _addNoteToFirebase = () => {
-    const refInDatabase = firebase.database().ref('users/' + this.props.user.uid + '/notes/').push();
-    this.createNote()
-      .then((elementReceived) => refInDatabase.update(elementReceived))
-      .then(() => console.log('note inserted into database'))
-      .catch((error) => console.log(error));
+    if(this.state.noteText){
+      const refInDatabase = firebase.database().ref('users/' + this.props.user.uid + '/notes/').push();
+      this.createNote()
+        .then((elementReceived) => refInDatabase.update(elementReceived))
+        .then(() => console.log('note inserted into database'))
+        .catch((error) => console.log(error));
+    }
   }
 
   deleteNoteFromFirebase = (noteId) => {
@@ -122,24 +102,45 @@ snapshotToArray = (snapshot) => {
 
   _deleteNote = (key) => {
     let removedNote = this.state.noteArray.splice(key, 1);
-    // removedNote datastructure
+    this.setState({
+      noteArray: this.state.noteArray
+    })
+    this.deleteNoteFromFirebase(removedNote[0].noteId)
+
+    // removedNote datastructure. It's an array with an obj inside
     // [ Object {
     //     "date": "2019/3/28",
     //     "noteId": "-Lb4ltSfGi5UqJcAG9q5",
     //     "noteText": "Hi",
     //   },]
+  }
+
+  _updateNote = (noteId, noteUpdate) => {
+    this.setState({
+      noteArray: this.state.noteArray,
+      noteText: noteUpdate,
+      updatingNote: true,
+      updateNoteId: noteId
+    })
+  }
+
+  _updateNoteInFirebase = (noteId, noteUpdate) => {
+    firebase.database().ref('users/' + this.props.user.uid + '/notes/' + noteId).update({noteText: noteUpdate});
 
     this.setState({
-      noteArray: this.state.noteArray
+      updatingNote: false,
+      noteText: '',
+      updateNoteId: 0,
     })
-    this.deleteNoteFromFirebase(removedNote[0].noteId)
   }
 
   render() {
 
     let notes = this.state.noteArray.map((val, key) => {
       return (<Note key={key} keyval={key} val={val} 
-              deleteMethod={ () => this._deleteNote(key)}/>)})
+              deleteMethod={ () => this._deleteNote(key)}
+              updateMethod={ () => this._updateNote(val.noteId, val.noteText)}
+              />)})
               
     return (
       <View style={styles.container}>
@@ -158,6 +159,8 @@ snapshotToArray = (snapshot) => {
               
             </Content>
 
+            <Footer>
+
             <View style={styles.footer}>
               <Content>
                 <Item >
@@ -175,10 +178,18 @@ snapshotToArray = (snapshot) => {
                 </Item>
               </Content>
             </View>
+            </Footer>
 
+            {this.state.updatingNote ?             
+            <TouchableOpacity onPress={() => this._updateNoteInFirebase(this.state.updateNoteId, this.state.noteText) } style={styles.addButton}>
+              <Text style={styles.addButtonText}>+</Text>
+            </TouchableOpacity>
+            :
             <TouchableOpacity onPress={() => this._addNoteToFirebase() } style={styles.addButton}>
               <Text style={styles.addButtonText}>+</Text>
             </TouchableOpacity>
+            }
+
         </Container>
 
       </View>
@@ -220,6 +231,8 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 10,
     minHeight: 50,
+    width: '100%',
+    bottom: 0,
   },
   textInput: {
     alignSelf: "stretch",
