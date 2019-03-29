@@ -9,7 +9,7 @@ export default class StyledText extends Component{
 
 const styles = StyleSheet.create({
     text: {
-        color: 'red',
-        backgroundColor: 'black'
+        color: 'white',
+        // backgroundColor: 'black'
     }
 })

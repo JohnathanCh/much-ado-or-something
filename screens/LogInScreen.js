@@ -85,14 +85,10 @@ class HomeScreen extends React.Component {
     // console.log("\n PROPS \n\n", this.props)
     return (
       <View style={styles.container}>
-        <Text>
-          LOGIN
-        </Text>
 
         <Container style={styles.form}>
             <Content>
-            <StyledHeader>Much Ado...</StyledHeader>
-            <StyledText>Or Something</StyledText>
+              <StyledHeader>Much Ado...</StyledHeader>
               <Form>
 
                 <Item floatingLabel>
@@ -115,7 +111,8 @@ class HomeScreen extends React.Component {
                     password: password
                   })}}/>
                 </Item>
-
+                
+                <View style={styles.buttons}>
                 <Button 
                 full 
                 rounded 
@@ -144,17 +141,7 @@ class HomeScreen extends React.Component {
                 onPress={() => this._loginWithFacebook()}>
                   <Text style={styles.buttonText}>Login with Facebook</Text>
                 </Button>
-
-                <Button 
-                full 
-                rounded 
-                primary 
-                style={styles.button}
-                onPress={() => this.props.navigation.navigate('OldLists')}>
-                  <Text style={styles.buttonText}>NAVIGATE TEST</Text>
-                </Button>
-
-                <Text> {this.props.user.email}</Text>
+                </View>
 
               </Form>
             </Content>
@@ -181,25 +168,32 @@ const MDTP = (dispatch) => ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: 'red',
+    backgroundColor: '#82EAAC',
     alignItems: 'center',
     justifyContent: 'center'
   },
   title: {
-    backgroundColor: 'black',
+    // backgroundColor: 'black',
     color: 'white',
     paddingTop: '50%',
   },
   form: {
-    backgroundColor: 'orange',
+    backgroundColor: '#82EAAC',
     alignContent: 'center',
     justifyContent: 'center',
     paddingTop: '10%',
     width: '75%',
-    height: '100%'
+    height: '100%',
+  },
+  buttons: {
+    margin: 'auto',
+    alignItems: 'flex-end'
+    // alignContent: 'center',
   },
   button: {
-    marginTop: 15,
+    marginTop: 25,
+    backgroundColor: '#22A255',
+    // alignContent: 'center',
   },
   buttonText: {
     color: 'white'

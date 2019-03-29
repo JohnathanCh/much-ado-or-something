@@ -164,14 +164,14 @@ snapshotToArray = (snapshot) => {
                   <Input
                   autoCorrect={true}
                   spellCheck={true}
+                  multiline={true}
                   placeholder='New To Do Item'
                   underlineColorAndroid='transparent'
                   style={styles.textInput}
                   onChangeText={(noteText) => 
                   this.setState({noteText})}
                   value={this.state.noteText}
-                  >
-                  </Input>
+                  />
                 </Item>
               </Content>
             </View>
@@ -194,14 +194,15 @@ const MSTP = (state) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#20B2AA',
   },
   header: {
-    backgroundColor: "#E91E63",
+    backgroundColor: "#20B2AA",
     alignItems: "center",
     justifyContent: "center",
     borderBottomWidth: 10,
-    borderBottomColor: "#ddd"
+    borderBottomColor: "#94CDAB"
   },
   headerText: {
     color: "white",
@@ -217,23 +218,24 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    zIndex: 10
+    zIndex: 10,
+    minHeight: 50,
   },
   textInput: {
     alignSelf: "stretch",
-    color: "#fff",
+    color: "white",
     padding: 20,
     backgroundColor: "#252525",
     borderTopWidth: 2,
-    borderTopColor: "#ededed",
-    marginBottom: 10
+    borderTopColor: "#486E57",
+    height: 100,
   },
   addButton: {
     position: "absolute",
     zIndex: 11,
     right: 20,
     bottom: 90,
-    backgroundColor: "#e91e63",
+    backgroundColor: "#19E36A",
     width: 90,
     height: 90,
     borderRadius: 59,
@@ -242,8 +244,8 @@ const styles = StyleSheet.create({
     elevation: 8
   },
   addButtonText: {
-    color: "#fff",
-    fontSize: 24
+    color: "#143722",
+    fontSize: 50
   }
 });﻿
 

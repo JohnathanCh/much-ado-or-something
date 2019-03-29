@@ -44,7 +44,7 @@ class Note extends Component {
                 </Body>
 
                 <TouchableOpacity onPress={() => this.props.deleteMethod(this.props.key)} style={styles.noteDelete}>
-                    <Text style={styles.noteDeleteText}>D</Text>
+                    <Text style={styles.noteDeleteText}>Delete</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -63,12 +63,13 @@ const styles = StyleSheet.create({
         padding: 20,
         paddingRight: 100,
         borderBottomWidth: 2,
-        borderBottomColor: '#EDEDED',
+        borderBottomColor: '#94CDAB',
+        backgroundColor: 'lightgrey',
     },
     noteText: {
         paddingLeft: 20,
         borderLeftWidth: 10,
-        borderBottomColor: '#E91E63'
+        color: 'purple',
     },
     noteDelete: {
         position: 'absolute',
@@ -79,6 +80,10 @@ const styles = StyleSheet.create({
         top: 10,
         bottom: 10,
         right: 10,
+        borderRadius: 40,
+        maxWidth: 100,
+        maxHeight: 50,
+        flex: 1,
     },
     noteDeleteText: {
         color: 'white',
