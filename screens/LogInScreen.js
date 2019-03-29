@@ -82,7 +82,7 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    console.log("\n PROPS \n\n", this.props)
+    // console.log("\n PROPS \n\n", this.props)
     return (
       <View style={styles.container}>
         <Text>

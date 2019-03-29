@@ -22,7 +22,7 @@ const AppNavigator = createStackNavigator(
   { 
     Main: MainTabNavigator,
     LogIn: LogInScreen,
-    Home: NewNoteScreen,
+    Home: HomeScreen,
     OldLists: NoteScreen
   },
   {

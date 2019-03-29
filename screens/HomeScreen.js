@@ -20,52 +20,130 @@ import {
   Button 
 } from 'native-base';
 import { connect } from 'react-redux';
-import { Ionicons } from '@expo/vector-icons'
+import * as firebase from 'firebase';
 
 import Note from './NoteScreen';
 
 class HomeScreen extends React.Component {
 
-  constructor(props){
-    super(props);
-    this.state = {
-      noteArray: [],
-      noteText: '',
-      visibilityFilter: 'SHOW_ALL_NOTES',
-    }
+  // constructor(props){
+  //   super(props);
+  //   this.state = {
+  //     noteArray: [],
+  //     noteText: '',
+  //   }
+  // }
+
+  state = {
+    noteArray: [],
+    noteText: '',
+  }
+
+  componentDidMount(){
+    // create listener on the node user/ this.user.uid /notes
+    this.getNotes();
+  }
+
+snapshotToArray = (snapshot) => {
+  var returnArr = [];
+
+  snapshot.forEach(function(childSnapshot) {
+      var note = childSnapshot.val();
+      note.noteId = childSnapshot.key;
+
+      returnArr.push(note);
+  });
+
+  return returnArr;
+};
+
+  getNotes = () =>{
+      firebase.database().ref(`users/${this.props.user.uid}/notes`).once('value').then(snapshot => this.snapshotToArray(snapshot)).then(notes => {
+        this.setState({
+          noteArray: [...notes],
+          noteText: this.state.noteText
+        })
+      })
+
+      // firebase.database().ref(`users/${this.props.user.uid}/notes`).on('value', function (snapshot) {
+      //   this.snapshotToArray(snapshot).then(notes => {
+      //     this.setState({
+      //     noteArray: [...notes] })})
+      // })
   }
 
   _addNote = () => {
+
     if(this.state.noteText){
-      let date = new Date()
-      this.state.noteArray.push({
-        date: date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDay(),
-        "note": this.state.noteText
+      this.state.noteArray.push({ 
+        noteText: this.state.noteText,
       })
 
-      this.setState({ 
+      this.setState({
         noteArray: this.state.noteArray,
-        noteText: ''
+        noteText: '',
+      })
+
+      firebase.database().push().set({
+        noteText: this.state.noteText
       })
     }
   }
 
-  _deleteNote = key => {
-    this.state.noteArray.splice(key, 1);
-    this.setState({ noteArray: this.state.noteArray.splice(key, 1) });
+  createNote = () => {
+    return new Promise((resolve, reject) => {
+      const { noteArray, noteText } = this.state
+
+      var date = new Date();
+      const newElement = {
+        'date':date.getFullYear()+ "/"+(date.getMonth()+1) + "/"+ date.getDate(),
+        'noteText': noteText
+      }
+
+      this.setState({
+         noteArray: [...noteArray, newElement ],
+         noteText:''
+      }, () => resolve(newElement))
+
+    })
+  }
+
+  _addNoteToFirebase = () => {
+    const refInDatabase = firebase.database().ref('users/' + this.props.user.uid + '/notes/').push();
+    this.createNote()
+      .then((elementReceived) => refInDatabase.update(elementReceived))
+      .then(() => console.log('note inserted into database'))
+      .catch((error) => console.log(error));
+  }
+
+  deleteNoteFromFirebase = (noteId) => {
+    firebase.database().ref('users/' + this.props.user.uid + '/notes/' + noteId).remove();
+  }
+
+  _deleteNote = (key) => {
+    let removedNote = this.state.noteArray.splice(key, 1);
+    // removedNote datastructure
+    // [ Object {
+    //     "date": "2019/3/28",
+    //     "noteId": "-Lb4ltSfGi5UqJcAG9q5",
+    //     "noteText": "Hi",
+    //   },]
+
+    this.setState({
+      noteArray: this.state.noteArray
+    })
+    this.deleteNoteFromFirebase(removedNote[0].noteId)
   }
 
   render() {
 
     let notes = this.state.noteArray.map((val, key) => {
       return (<Note key={key} keyval={key} val={val} 
-              deleteMethod={ () => this._deleteNote(key)}/>
-      )
-
-    } )
+              deleteMethod={ () => this._deleteNote(key)}/>)})
+              
     return (
       <View style={styles.container}>
-        {/* <Container>
+        <Container>
             <Content>
 
             <View style={styles.header}>
@@ -75,7 +153,7 @@ class HomeScreen extends React.Component {
             </View>
 
             <ScrollView>
-              {notes}
+            {notes}
             </ScrollView>
               
             </Content>
@@ -98,10 +176,10 @@ class HomeScreen extends React.Component {
               </Content>
             </View>
 
-            <TouchableOpacity onPress={ this._addNote.bind(this) } style={styles.addButton}>
-              <Ionicons name="md-add" size={30} style={{padding: 10, alignSelf: 'center'}}/>
+            <TouchableOpacity onPress={() => this._addNoteToFirebase() } style={styles.addButton}>
+              <Text style={styles.addButtonText}>+</Text>
             </TouchableOpacity>
-        </Container> */}
+        </Container>
 
       </View>
     );
