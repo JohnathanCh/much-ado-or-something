@@ -46,6 +46,12 @@ class HomeScreen extends React.Component {
     this.getNotes();
   }
 
+  componentDidUpdate(){
+    if(this.state.updatingNote === false){
+      this.getNotes()
+    }
+  }
+
 snapshotToArray = (snapshot) => {
   var returnArr = [];
 
