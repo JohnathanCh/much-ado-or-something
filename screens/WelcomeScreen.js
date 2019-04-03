@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'teal',
     },
     pageText: {
-        color: 'white',        
+        color: 'white',
+        size: 10,
     }
 })
 
